@@ -1,0 +1,17 @@
+{
+  "id": "puzzle-sobu-01",
+  "type": "route_selection",
+  "title": "三鷹から西荻窪へ",
+  "description": "三鷹駅から西荻窪駅まで最短ルートで移動してください",
+  "railwayMap": {},
+  "startStation": "st-mitaka",
+  "goalStation": "st-nishi-ogikubo",
+  "constraints": [
+    {
+      "type": "max_stations",
+      "value": 3
+    }
+  ],
+  "timeLimit": 60,
+  "correctPath": ["st-mitaka", "st-kichijoji", "st-nishi-ogikubo"]
+}

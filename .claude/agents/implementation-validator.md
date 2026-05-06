@@ -197,25 +197,30 @@ model: sonnet
 
 検証時には以下のツールを実行します:
 
+### 検証環境のビルド
+```bash
+docker compose build
+```
+
 ### Lintチェック
 ```bash
-npm run lint
+docker compose run --rm app npm run lint
 ```
 
 ### 型チェック
 ```bash
-npm run typecheck
+docker compose run --rm app npm run typecheck
 ```
 
 ### テスト実行
 ```bash
 npm test
-npm run test:coverage
+docker compose run --rm app npm run test:coverage
 ```
 
 ### ビルド確認
 ```bash
-npm run build
+docker compose run --rm app npm run build
 ```
 
 ## コード品質の詳細チェック

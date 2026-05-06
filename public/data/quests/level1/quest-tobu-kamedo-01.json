@@ -1,0 +1,37 @@
+{
+  "id": "quest-tobu-kamedo-01",
+  "title": "東武亀戸線への挑戦",
+  "description": "東武亀戸線の基礎を学ぼう",
+  "level": 1,
+  "railwayLine": "line-tobu-kamedo",
+  "steps": [
+    {
+      "type": "quiz",
+      "content": []
+    },
+    {
+      "type": "puzzle",
+      "content": {}
+    },
+    {
+      "type": "challenge",
+      "content": {}
+    }
+  ],
+  "rewards": [
+    {
+      "type": "railway_line",
+      "id": "line-tobu-kamedo",
+      "name": "東武亀戸線",
+      "rarity": "common"
+    },
+    {
+      "type": "points",
+      "id": "points-100",
+      "name": "100ポイント"
+    }
+  ],
+  "unlockCondition": {
+    "requiredLevel": 1
+  }
+}

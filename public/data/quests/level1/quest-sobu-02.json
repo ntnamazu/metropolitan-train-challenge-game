@@ -1,0 +1,38 @@
+{
+  "id": "quest-sobu-02",
+  "title": "中央・総武線マスター",
+  "description": "中央・総武線の知識を深めよう",
+  "level": 1,
+  "railwayLine": "line-sobu",
+  "steps": [
+    {
+      "type": "quiz",
+      "content": []
+    },
+    {
+      "type": "puzzle",
+      "content": {}
+    },
+    {
+      "type": "challenge",
+      "content": {}
+    }
+  ],
+  "rewards": [
+    {
+      "type": "badge",
+      "id": "badge-sobu-master",
+      "name": "総武線マスター",
+      "rarity": "rare"
+    },
+    {
+      "type": "points",
+      "id": "points-150",
+      "name": "150ポイント"
+    }
+  ],
+  "unlockCondition": {
+    "requiredQuestIds": ["quest-sobu-01"],
+    "requiredLevel": 1
+  }
+}

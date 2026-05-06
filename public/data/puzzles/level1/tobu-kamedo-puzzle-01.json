@@ -1,0 +1,12 @@
+{
+  "id": "puzzle-tobu-kamedo-01",
+  "type": "route_selection",
+  "title": "亀戸から亀戸水神へ",
+  "description": "亀戸駅から亀戸水神駅まで移動してください",
+  "railwayMap": {},
+  "startStation": "st-kameido",
+  "goalStation": "st-kameido-suijin",
+  "constraints": [],
+  "timeLimit": 30,
+  "correctPath": ["st-kameido", "st-kameido-suijin"]
+}

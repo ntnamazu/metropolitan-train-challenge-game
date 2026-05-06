@@ -1,0 +1,37 @@
+{
+  "id": "quest-sobu-01",
+  "title": "中央・総武線への第一歩",
+  "description": "中央・総武線各駅停車の基礎を学ぼう",
+  "level": 1,
+  "railwayLine": "line-sobu",
+  "steps": [
+    {
+      "type": "quiz",
+      "content": []
+    },
+    {
+      "type": "puzzle",
+      "content": {}
+    },
+    {
+      "type": "challenge",
+      "content": {}
+    }
+  ],
+  "rewards": [
+    {
+      "type": "railway_line",
+      "id": "line-sobu",
+      "name": "中央・総武線各駅停車",
+      "rarity": "common"
+    },
+    {
+      "type": "points",
+      "id": "points-100",
+      "name": "100ポイント"
+    }
+  ],
+  "unlockCondition": {
+    "requiredLevel": 1
+  }
+}

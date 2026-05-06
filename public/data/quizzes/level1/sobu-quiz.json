@@ -1,0 +1,29 @@
+[
+  {
+    "id": "quiz-sobu-01",
+    "category": "station_name",
+    "question": "中央・総武線各駅停車で三鷹の次の駅はどこ？",
+    "choices": ["吉祥寺", "西荻窪", "荻窪", "中野"],
+    "correctIndex": 0,
+    "explanation": "三鷹の次は吉祥寺です。中央・総武線各駅停車は三鷹から千葉方面に向かいます。",
+    "difficulty": 1
+  },
+  {
+    "id": "quiz-sobu-02",
+    "category": "travel_time",
+    "question": "三鷹から吉祥寺まで約何分かかる？",
+    "choices": ["1分", "2分", "3分", "5分"],
+    "correctIndex": 1,
+    "explanation": "三鷹から吉祥寺まで約2分です。",
+    "difficulty": 1
+  },
+  {
+    "id": "quiz-sobu-03",
+    "category": "company_features",
+    "question": "中央・総武線各駅停車を運営している会社は？",
+    "choices": ["JR東日本", "東京メトロ", "東武鉄道", "京王電鉄"],
+    "correctIndex": 0,
+    "explanation": "中央・総武線各駅停車はJR東日本が運営しています。",
+    "difficulty": 1
+  }
+]

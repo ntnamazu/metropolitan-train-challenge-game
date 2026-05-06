@@ -1,0 +1,20 @@
+[
+  {
+    "id": "quiz-tobu-kamedo-01",
+    "category": "station_name",
+    "question": "東武亀戸線の起点駅は？",
+    "choices": ["亀戸", "亀戸水神", "押上", "曳舟"],
+    "correctIndex": 0,
+    "explanation": "東武亀戸線の起点駅は亀戸です。",
+    "difficulty": 1
+  },
+  {
+    "id": "quiz-tobu-kamedo-02",
+    "category": "company_features",
+    "question": "東武亀戸線を運営している会社は？",
+    "choices": ["東武鉄道", "JR東日本", "京成電鉄", "東京メトロ"],
+    "correctIndex": 0,
+    "explanation": "東武亀戸線は東武鉄道が運営しています。",
+    "difficulty": 1
+  }
+]

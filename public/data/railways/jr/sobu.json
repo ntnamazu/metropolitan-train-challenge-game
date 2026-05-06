@@ -1,0 +1,46 @@
+{
+  "stations": [
+    {
+      "id": "st-mitaka",
+      "name": "三鷹",
+      "lines": ["line-sobu"],
+      "position": { "x": 0, "y": 0 }
+    },
+    {
+      "id": "st-kichijoji",
+      "name": "吉祥寺",
+      "lines": ["line-sobu"],
+      "position": { "x": 50, "y": 0 }
+    },
+    {
+      "id": "st-nishi-ogikubo",
+      "name": "西荻窪",
+      "lines": ["line-sobu"],
+      "position": { "x": 100, "y": 0 }
+    }
+  ],
+  "lines": [
+    {
+      "id": "line-sobu",
+      "name": "中央・総武線各駅停車",
+      "company": "JR東日本",
+      "color": "#FFD700",
+      "category": "jr",
+      "stations": ["st-mitaka", "st-kichijoji", "st-nishi-ogikubo"]
+    }
+  ],
+  "connections": [
+    {
+      "fromStationId": "st-mitaka",
+      "toStationId": "st-kichijoji",
+      "lineId": "line-sobu",
+      "travelTime": 2
+    },
+    {
+      "fromStationId": "st-kichijoji",
+      "toStationId": "st-nishi-ogikubo",
+      "lineId": "line-sobu",
+      "travelTime": 2
+    }
+  ]
+}

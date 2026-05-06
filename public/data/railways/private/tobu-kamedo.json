@@ -1,0 +1,34 @@
+{
+  "stations": [
+    {
+      "id": "st-kameido",
+      "name": "亀戸",
+      "lines": ["line-tobu-kamedo"],
+      "position": { "x": 0, "y": 0 }
+    },
+    {
+      "id": "st-kameido-suijin",
+      "name": "亀戸水神",
+      "lines": ["line-tobu-kamedo"],
+      "position": { "x": 50, "y": 0 }
+    }
+  ],
+  "lines": [
+    {
+      "id": "line-tobu-kamedo",
+      "name": "東武亀戸線",
+      "company": "東武鉄道",
+      "color": "#1E90FF",
+      "category": "private",
+      "stations": ["st-kameido", "st-kameido-suijin"]
+    }
+  ],
+  "connections": [
+    {
+      "fromStationId": "st-kameido",
+      "toStationId": "st-kameido-suijin",
+      "lineId": "line-tobu-kamedo",
+      "travelTime": 1
+    }
+  ]
+}

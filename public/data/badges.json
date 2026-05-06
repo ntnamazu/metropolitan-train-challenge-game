@@ -1,0 +1,20 @@
+[
+  {
+    "id": "badge-sobu-master",
+    "name": "総武線マスター",
+    "description": "中央・総武線のすべてのクエストをクリア",
+    "condition": {
+      "type": "complete_quest",
+      "requirement": "quest-sobu-02"
+    }
+  },
+  {
+    "id": "badge-first-quest",
+    "name": "はじめの一歩",
+    "description": "最初のクエストをクリア",
+    "condition": {
+      "type": "complete_quest",
+      "requirement": "quest-sobu-01"
+    }
+  }
+]
