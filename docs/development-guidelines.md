@@ -1018,7 +1018,43 @@ npm run typecheck
 - PR作成時に自動でCI実行され、マージ前に品質を担保
 - 早期発見により、修正コストを最大80%削減
 
-## チェックリスト
+## サードパーティ画像の利用ガイドライン
+
+路線写真など外部ソースの画像を使用する場合のルール。
+
+### 使用できるライセンス
+
+| ライセンス | 商用利用 | 使用可否 |
+|-----------|---------|---------|
+| CC0 (パブリックドメイン) | ✅ | ✅ 使用可 |
+| CC BY | ✅ | ✅ 使用可 |
+| CC BY-SA | ✅ | ✅ 使用可 |
+| CC BY-NC | ❌ | ❌ 使用不可 (非商用限定) |
+| CC BY-NC-SA | ❌ | ❌ 使用不可 (非商用限定) |
+| 著作権あり | - | ❌ 使用不可 |
+
+将来的な収益化を妨げないよう、商用利用可能なライセンスのみを使用すること。
+
+### 画像データの登録方法
+
+路線JSONの `quizPhotos` / `feedbackPhotos` / `unlockPhoto` に以下のフィールドをすべて記録する:
+
+```json
+{
+  "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/...",
+  "photographer": "撮影者名 (Wikimedia Commonsに記載の名前を使用)",
+  "license": "CC BY-SA",
+  "licenseVersion": "4.0",
+  "commonsPageUrl": "https://commons.wikimedia.org/wiki/File:..."
+}
+```
+
+**確認手順**:
+1. Wikimedia CommonsのファイルページでライセンスとPhotographerを確認する
+2. `commonsPageUrl` にはファイルページのURLを記録する (画像の直URLではなく)
+3. CC0の場合でも `photographer` と `commonsPageUrl` は記録する
+
+## 実装完了前チェックリスト
 
 実装完了前に確認:
 

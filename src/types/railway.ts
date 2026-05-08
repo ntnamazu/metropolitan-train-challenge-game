@@ -3,6 +3,22 @@
  */
 
 /**
+ * 路線写真メタデータ
+ */
+export interface RailwayPhoto {
+  /** 画像URL (Wikimedia CommonsのURL) */
+  imageUrl: string;
+  /** 撮影者名 */
+  photographer: string;
+  /** ライセンス種別 */
+  license: 'CC0' | 'CC BY' | 'CC BY-SA';
+  /** ライセンスバージョン (例: "4.0") */
+  licenseVersion?: string;
+  /** Wikimedia CommonsページのURL */
+  commonsPageUrl: string;
+}
+
+/**
  * 駅
  */
 export interface Station {
@@ -32,6 +48,12 @@ export interface RailwayLine {
   category: 'jr' | 'private' | 'metro';
   /** 駅IDの順序付きリスト */
   stations: string[];
+  /** クイズ・フィードバック画面用写真プール (約5枚) */
+  quizPhotos: RailwayPhoto[];
+  /** フィードバック専用写真プール (当初は空配列) */
+  feedbackPhotos: RailwayPhoto[];
+  /** 路線アンロック演出用写真 (1枚) */
+  unlockPhoto?: RailwayPhoto;
 }
 
 /**

@@ -26,7 +26,51 @@
       "company": "JR東日本",
       "color": "#FFD700",
       "category": "jr",
-      "stations": ["st-mitaka", "st-kichijoji", "st-nishi-ogikubo"]
+      "stations": ["st-mitaka", "st-kichijoji", "st-nishi-ogikubo"],
+      "quizPhotos": [
+        {
+          "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/JREast-E231-Mitsu11.jpg/960px-JREast-E231-Mitsu11.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "photographer": "Sui-setz",
+          "license": "CC BY",
+          "licenseVersion": "3.0",
+          "commonsPageUrl": "https://commons.wikimedia.org/wiki/File:JREast-E231-Mitsu11.jpg"
+        },
+        {
+          "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/JR_East_E231-0_Mitsu_31.jpg/960px-JR_East_E231-0_Mitsu_31.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "photographer": "Sui-setz",
+          "license": "CC0",
+          "commonsPageUrl": "https://commons.wikimedia.org/wiki/File:JR_East_E231-0_Mitsu_31.jpg"
+        },
+        {
+          "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Jreast_e231sobu.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+          "photographer": "Kaz nut",
+          "license": "CC BY-SA",
+          "licenseVersion": "3.0",
+          "commonsPageUrl": "https://commons.wikimedia.org/wiki/File:Jreast_e231sobu.jpg"
+        },
+        {
+          "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Sobu_E231_Mitaka_20030222.JPG/960px-Sobu_E231_Mitaka_20030222.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "photographer": "Taisyo",
+          "license": "CC BY-SA",
+          "licenseVersion": "3.0",
+          "commonsPageUrl": "https://commons.wikimedia.org/wiki/File:Sobu_E231_Mitaka_20030222.JPG"
+        },
+        {
+          "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/JR_East_E231_Mitsu_B32.jpg/960px-JR_East_E231_Mitsu_B32.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "photographer": "サゴハチ",
+          "license": "CC BY-SA",
+          "licenseVersion": "4.0",
+          "commonsPageUrl": "https://commons.wikimedia.org/wiki/File:JR_East_E231_Mitsu_B32.jpg"
+        }
+      ],
+      "feedbackPhotos": [],
+      "unlockPhoto": {
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/JREast-E231-Mitsu11.jpg/960px-JREast-E231-Mitsu11.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "photographer": "Sui-setz",
+        "license": "CC BY",
+        "licenseVersion": "3.0",
+        "commonsPageUrl": "https://commons.wikimedia.org/wiki/File:JREast-E231-Mitsu11.jpg"
+      }
     }
   ],
   "connections": [

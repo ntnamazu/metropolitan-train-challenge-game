@@ -20,7 +20,52 @@
       "company": "東武鉄道",
       "color": "#1E90FF",
       "category": "private",
-      "stations": ["st-kameido", "st-kameido-suijin"]
+      "stations": ["st-kameido", "st-kameido-suijin"],
+      "quizPhotos": [
+        {
+          "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Tobu-railway-8568F-20170219-134904.jpg/960px-Tobu-railway-8568F-20170219-134904.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "photographer": "LERK",
+          "license": "CC BY-SA",
+          "licenseVersion": "4.0",
+          "commonsPageUrl": "https://commons.wikimedia.org/wiki/File:Tobu-railway-8568F-20170219-134904.jpg"
+        },
+        {
+          "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Tobu-Kameido-Line.JPG/960px-Tobu-Kameido-Line.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "photographer": "Sui-setz",
+          "license": "CC BY-SA",
+          "licenseVersion": "3.0",
+          "commonsPageUrl": "https://commons.wikimedia.org/wiki/File:Tobu-Kameido-Line.JPG"
+        },
+        {
+          "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Tobu_8000_series_8570_at_Kameido_Station.jpg/960px-Tobu_8000_series_8570_at_Kameido_Station.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "photographer": "Sui-setz",
+          "license": "CC BY-SA",
+          "licenseVersion": "3.0",
+          "commonsPageUrl": "https://commons.wikimedia.org/wiki/File:Tobu_8000_series_8570_at_Kameido_Station.jpg"
+        },
+        {
+          "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Tobu_8000_series_8575_at_Kameido_Station.jpg/960px-Tobu_8000_series_8575_at_Kameido_Station.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "photographer": "Sui-setz",
+          "license": "CC BY-SA",
+          "licenseVersion": "3.0",
+          "commonsPageUrl": "https://commons.wikimedia.org/wiki/File:Tobu_8000_series_8575_at_Kameido_Station.jpg"
+        },
+        {
+          "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Tobu-Series8000_8575.jpg/960px-Tobu-Series8000_8575.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+          "photographer": "そらみみ",
+          "license": "CC BY-SA",
+          "licenseVersion": "4.0",
+          "commonsPageUrl": "https://commons.wikimedia.org/wiki/File:Tobu-Series8000_8575.jpg"
+        }
+      ],
+      "feedbackPhotos": [],
+      "unlockPhoto": {
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Tobu-railway-8568F-20170219-134904.jpg/960px-Tobu-railway-8568F-20170219-134904.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+        "photographer": "LERK",
+        "license": "CC BY-SA",
+        "licenseVersion": "4.0",
+        "commonsPageUrl": "https://commons.wikimedia.org/wiki/File:Tobu-railway-8568F-20170219-134904.jpg"
+      }
     }
   ],
   "connections": [

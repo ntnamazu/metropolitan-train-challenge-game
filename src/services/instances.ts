@@ -9,7 +9,7 @@ import { ProgressManager } from './ProgressManager';
 import { BadgeSystem } from './BadgeSystem';
 import { DailyChallengeManager } from './DailyChallengeManager';
 
-const railwayRepo = new RailwayDataRepository();
+export const railwayRepo = new RailwayDataRepository();
 export const quizRepo = new QuizDataRepository(railwayRepo);
 export const puzzleRepo = new PuzzleDataRepository(railwayRepo);
 const playerRepo = new PlayerDataRepository();

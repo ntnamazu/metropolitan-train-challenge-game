@@ -3,11 +3,13 @@ import { useUiStore, useProgressStore, useQuestStore } from '../../stores';
 import { QuizContainer } from '../quiz/QuizContainer';
 import { PuzzleContainer } from '../puzzle/PuzzleContainer';
 import { Button } from '../common/Button';
-import { quizRepo, puzzleRepo } from '../../services/instances';
+import { RailwayLinePhoto } from '../common/RailwayLinePhoto';
+import { quizRepo, puzzleRepo, railwayRepo } from '../../services/instances';
 import type {
   QuizResult,
   PuzzleData,
   RailwayMap,
+  RailwayLine,
   Quest,
   QuizQuestion,
 } from '../../types';
@@ -16,9 +18,11 @@ type Phase = 'loading' | 'quiz' | 'puzzle' | 'challenge' | 'error';
 
 function RewardModal({
   rewards,
+  unlockedLine,
   onClose,
 }: {
   rewards: Quest['rewards'];
+  unlockedLine: RailwayLine | null;
   onClose: () => void;
 }) {
   return (
@@ -29,6 +33,11 @@ function RewardModal({
           クエストクリア！
         </h2>
         <p className="text-gray-500 mb-4">報酬を獲得しました</p>
+        {unlockedLine?.unlockPhoto && (
+          <div className="mb-4">
+            <RailwayLinePhoto photo={unlockedLine.unlockPhoto} />
+          </div>
+        )}
         <div className="flex flex-col gap-2 mb-5">
           {rewards.map((r) => (
             <div
@@ -61,6 +70,7 @@ export function QuestPlayScreen() {
   const [quizResults, setQuizResults] = useState<QuizResult[]>([]);
   const [puzzleData, setPuzzleData] = useState<PuzzleData | null>(null);
   const [railwayMap, setRailwayMap] = useState<RailwayMap | null>(null);
+  const [railwayLine, setRailwayLine] = useState<RailwayLine | null>(null);
   const [showRewardModal, setShowRewardModal] = useState(false);
 
   useEffect(() => {
@@ -74,8 +84,12 @@ export function QuestPlayScreen() {
   const initQuest = async (quest: Quest) => {
     try {
       await startQuest();
-      const questions = await quizRepo.loadQuizzesByQuestId(quest.id);
+      const [questions, line] = await Promise.all([
+        quizRepo.loadQuizzesByQuestId(quest.id),
+        railwayRepo.getLineById(quest.railwayLine).catch(() => null),
+      ]);
       setQuizQuestions(questions);
+      setRailwayLine(line);
       setPhase('quiz');
     } catch {
       setPhase('error');
@@ -125,6 +139,10 @@ export function QuestPlayScreen() {
 
   if (!selectedQuest) return null;
 
+  const hasRailwayLineReward = selectedQuest.rewards.some(
+    (r) => r.type === 'railway_line'
+  );
+
   return (
     <div className="min-h-screen p-4 max-w-lg mx-auto">
       <div className="flex items-center gap-3 mb-4">
@@ -166,6 +184,7 @@ export function QuestPlayScreen() {
         <QuizContainer
           questions={quizQuestions}
           onComplete={handleQuizComplete}
+          railwayLine={railwayLine ?? undefined}
         />
       )}
 
@@ -207,6 +226,7 @@ export function QuestPlayScreen() {
       {showRewardModal && (
         <RewardModal
           rewards={selectedQuest.rewards}
+          unlockedLine={hasRailwayLineReward ? railwayLine : null}
           onClose={() => navigate('quest-list')}
         />
       )}

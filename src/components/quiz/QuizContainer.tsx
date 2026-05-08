@@ -1,22 +1,59 @@
 import { useEffect, useState } from 'react';
-import type { QuizQuestion, QuizResult } from '../../types';
+import type {
+  QuizQuestion,
+  QuizResult,
+  RailwayLine,
+  RailwayPhoto,
+} from '../../types';
 import { Button } from '../common/Button';
+import { RailwayLinePhoto } from '../common/RailwayLinePhoto';
 
 interface QuizContainerProps {
   questions: QuizQuestion[];
   onComplete: (results: QuizResult[]) => void;
+  railwayLine?: RailwayLine;
 }
 
-export function QuizContainer({ questions, onComplete }: QuizContainerProps) {
+function pickRandom<T>(arr: T[]): T | undefined {
+  if (arr.length === 0) return undefined;
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+export function QuizContainer({
+  questions,
+  onComplete,
+  railwayLine,
+}: QuizContainerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [results, setResults] = useState<QuizResult[]>([]);
   const [lastResult, setLastResult] = useState<QuizResult | null>(null);
   const [answered, setAnswered] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [readyToComplete, setReadyToComplete] = useState(false);
+  const [quizPhoto, setQuizPhoto] = useState<RailwayPhoto | undefined>(
+    undefined
+  );
+  const [feedbackPhoto, setFeedbackPhoto] = useState<RailwayPhoto | undefined>(
+    undefined
+  );
 
   const question = questions[currentIndex];
   const isLastQuestion = currentIndex === questions.length - 1;
+
+  useEffect(() => {
+    if (!railwayLine) return;
+    setQuizPhoto(pickRandom(railwayLine.quizPhotos));
+    setFeedbackPhoto(undefined);
+  }, [currentIndex, railwayLine]);
+
+  useEffect(() => {
+    if (!answered || !railwayLine) return;
+    const pool =
+      railwayLine.feedbackPhotos.length > 0
+        ? railwayLine.feedbackPhotos
+        : railwayLine.quizPhotos;
+    setFeedbackPhoto(pickRandom(pool));
+  }, [answered, railwayLine]);
 
   useEffect(() => {
     if (readyToComplete && results.length === questions.length) {
@@ -65,6 +102,8 @@ export function QuizContainer({ questions, onComplete }: QuizContainerProps) {
     return 'bg-white border-gray-200 opacity-60';
   };
 
+  const displayPhoto = answered ? (feedbackPhoto ?? quizPhoto) : quizPhoto;
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between text-sm text-gray-500">
@@ -75,6 +114,8 @@ export function QuizContainer({ questions, onComplete }: QuizContainerProps) {
           クイズ
         </span>
       </div>
+
+      {displayPhoto && <RailwayLinePhoto photo={displayPhoto} />}
 
       <div className="bg-white rounded-xl p-5 shadow">
         <p className="text-lg font-semibold text-gray-800 mb-5">

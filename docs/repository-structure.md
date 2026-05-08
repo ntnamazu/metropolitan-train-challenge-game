@@ -291,46 +291,29 @@ utils/
 
 **役割**: 静的なゲームデータ (JSON形式)
 
-**構造**:
+**構造** (✅ = 実装済み、🔲 = 将来追加予定):
 ```
 public/data/
+├── badges.json             # ✅ バッジ定義データ
 ├── railways/               # 路線データ
 │   ├── jr/
-│   │   ├── yamanote.json
-│   │   ├── chuo.json
-│   │   ├── sobu.json
-│   │   └── tobu-kamedo.json
+│   │   └── sobu.json       # ✅ 総武線
 │   ├── private/
-│   │   ├── tokyu.json
-│   │   ├── odakyu.json
-│   │   ├── keio.json
-│   │   ├── seibu.json
-│   │   ├── tobu.json
-│   │   ├── keisei.json
-│   │   └── keikyu.json
-│   └── metro/
-│       ├── ginza.json
-│       ├── marunouchi.json
-│       └── fukutoshin.json
+│   │   └── tobu-kamedo.json # ✅ 東武亀戸線
+│   └── metro/              # 🔲 将来追加予定
 ├── quizzes/                # クイズデータ
-│   ├── level1/
-│   │   ├── yamanote-quiz.json
-│   │   └── chuo-quiz.json
-│   ├── level2/
-│   ├── level3/
-│   └── level4/
+│   └── level1/
+│       ├── sobu-quiz.json          # ✅ 総武線クイズ
+│       └── tobu-kamedo-quiz.json   # ✅ 東武亀戸線クイズ
 ├── puzzles/                # パズルデータ
-│   ├── level1/
-│   │   ├── yamanote-puzzle-01.json
-│   │   └── chuo-puzzle-01.json
-│   ├── level2/
-│   ├── level3/
-│   └── level4/
+│   └── level1/
+│       ├── sobu-puzzle-01.json     # ✅ 総武線パズル
+│       └── tobu-kamedo-puzzle-01.json # ✅ 東武亀戸線パズル
 └── quests/                 # クエストデータ
-    ├── level1/
-    ├── level2/
-    ├── level3/
-    └── level4/
+    └── level1/
+        ├── quest-sobu-01.json      # ✅
+        ├── quest-sobu-02.json      # ✅
+        └── quest-tobu-kamedo-01.json # ✅
 ```
 
 **命名規則**:
@@ -637,26 +620,22 @@ export class QuizEngine {
 
 #### 路線データ (50路線想定)
 
-**構造**:
+**構造** (Phase 3 完成時の想定):
 ```
 public/data/railways/
 ├── jr/                     # JR路線
-│   ├── yamanote.json
-│   ├── chuo.json
-│   ├── sobu.json
-│   └── tobu-kamedo.json
+│   ├── sobu.json           # ✅ 実装済み
+│   ├── yamanote.json       # 🔲 将来追加予定
+│   ├── chuo.json           # 🔲 将来追加予定
+│   └── ...
 ├── private/                # 私鉄
-│   ├── tokyu.json
-│   ├── odakyu.json
-│   ├── keio.json
-│   ├── seibu.json
-│   ├── tobu.json
-│   ├── keisei.json
-│   └── keikyu.json
+│   ├── tobu-kamedo.json    # ✅ 実装済み
+│   ├── tokyu.json          # 🔲 将来追加予定
+│   ├── odakyu.json         # 🔲 将来追加予定
+│   └── ...
 └── metro/                  # 地下鉄
-    ├── ginza.json
-    ├── marunouchi.json
-    └── fukutoshin.json
+    ├── ginza.json          # 🔲 将来追加予定
+    └── ...
 ```
 
 **配置方針**:

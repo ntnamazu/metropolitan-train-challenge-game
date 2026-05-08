@@ -125,6 +125,8 @@ public/                  # 公開ディレクトリ
 | クイズデータ | 静的ファイル (公開ディレクトリ) | JSON | 変更頻度が低い、全プレイヤー共通、遅延読み込み可能 |
 | パズルデータ | 静的ファイル (公開ディレクトリ) | JSON | 変更頻度が低い、全プレイヤー共通、必要な時だけロード |
 | ゲーム設定 | localStorage | JSON | ユーザー固有の設定 (音量、表示設定など) |
+| 路線写真メタデータ | 路線データJSON内に含む | JSON | 路線データと一体管理、撮影者・ライセンス情報を保持 |
+| 路線写真画像 | 外部URL参照 (Wikimedia Commons) | - | **URL参照方式を採用**: Wikimedia CommonsのURLをそのまま参照。ストレージ不要。CSPで `https://upload.wikimedia.org` の許可が必要 |
 
 ### バックアップ戦略
 
@@ -277,6 +279,7 @@ public/data/
 
 - **本番環境**: 必ずHTTPSで配信
 - **CSP (Content Security Policy)**: script-src, style-src, img-srcを制限
+  - img-src: 画像をWikimedia CommonsのURLから直接参照する場合は `https://upload.wikimedia.org` を許可する必要がある。自前ストレージに保存する場合は不要。
 
 ## スケーラビリティ設計
 

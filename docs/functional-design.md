@@ -318,6 +318,25 @@ type ScreenType =
   | 'daily_challenge'; // デイリーチャレンジ
 ```
 
+#### RailwayLinePhoto: 路線写真コンポーネント
+
+**責務**:
+- 路線写真の表示
+- 帰属表示(アトリビューション)の常時表示
+
+**インターフェース**:
+```typescript
+interface RailwayLinePhotoProps {
+  photo: RailwayPhoto;
+}
+```
+
+**表示仕様**:
+- 写真の下部に帰属表示を常時表示する
+- 表示例: `📷 撮影者名 / Wikimedia Commons / CC BY-SA 4.0`
+- 帰属テキストは写真の外側(下)に小さなグレーテキストで表示する
+- CC0ライセンスでも一貫性のため帰属表示を行う
+
 #### Quiz/PuzzleUI: ゲーム画面UI
 
 **責務**:
