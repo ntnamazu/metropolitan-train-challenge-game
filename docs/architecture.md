@@ -1,5 +1,8 @@
 # 技術仕様書 (Architecture Design Document)
 
+**更新日**: 2026-05-08
+**関連ドキュメント**: [product-requirements.md](./product-requirements.md) | [functional-design.md](./functional-design.md) | [repository-structure.md](./repository-structure.md)
+
 ## テクノロジースタック
 
 ### 言語・ランタイム
@@ -114,6 +117,18 @@ public/                  # 公開ディレクトリ
     └── puzzles/         # パズルデータ
 ```
 
+### 状態管理アーキテクチャ
+
+ZustandのstoreはUIレイヤーとゲームロジックレイヤーの橋渡しとして機能する。サービスクラスが返す結果をstoreに格納し、コンポーネントはstoreをサブスクライブして表示を更新する。
+
+| Store | 責務 | 管理する主な状態 | 更新タイミング |
+|-------|------|----------------|--------------|
+| `questStore` | クエストの進行状態 | 現在のクエスト、進行中のステップ、セッション情報 | クエスト開始・ステップ完了・クエスト終了時 |
+| `progressStore` | プレイヤーの進捗 | 現在のレベル、クリア済みクエストID、獲得バッジ | クエストクリア・レベルアップ・バッジ獲得時 |
+| `uiStore` | 画面表示の状態 | 現在の画面ID、モーダルの開閉状態、ローディング状態 | 画面遷移・モーダル操作・非同期処理の開始/完了時 |
+
+**データフロー**: UIコンポーネント → サービスクラス呼び出し → Store更新 → UIコンポーネント再描画
+
 ## データ永続化戦略
 
 ### ストレージ方式
@@ -184,6 +199,11 @@ class PlayerDataRepository {
 
 ```
 public/data/
+├── quests/
+│   ├── level1/                 # レベル1用クエストデータ
+│   ├── level2/
+│   ├── level3/
+│   └── level4/
 ├── railways/
 │   ├── jr/
 │   │   ├── yamanote.json      # 山手線
@@ -688,6 +708,11 @@ docker compose run --rm app npm run preview
 - Netlify: 同様の機能を提供
 - GitHub Pages: 静的サイトホスティング
 
+**稼働率の担保**:
+- 静的サイトのためサーバーサイドの障害リスクが最小限
+- Vercel/NetlifyのSLA (99.9%以上) に依拠することでPRDの要件「稼働率99%以上(月間)」を満たす
+- CDNによるコンテンツ配信で単一障害点を排除
+
 **デプロイフロー**:
 1. `main`ブランチへのpush
 2. 自動ビルド実行
@@ -801,11 +826,14 @@ jobs:
           docker compose run --rm app npm ci
           docker compose run --rm app npm run build
       
+      - name: Serve application
+        run: docker compose run --rm -d -p 4173:4173 app npm run preview -- --host 0.0.0.0 --port 4173
+      
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v10
         with:
           urls: |
-            http://localhost:5173
+            http://localhost:4173
           budgetPath: ./lighthouse-budget.json
 ```
 

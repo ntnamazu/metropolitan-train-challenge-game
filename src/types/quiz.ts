@@ -16,6 +16,11 @@ export type QuizCategory =
   | 'direct_operation'; // 相互直通運転
 
 /**
+ * クイズ回答セッションの状態
+ */
+export type QuizStatus = 'answering' | 'correct' | 'incorrect';
+
+/**
  * クイズ問題
  */
 export interface QuizQuestion {

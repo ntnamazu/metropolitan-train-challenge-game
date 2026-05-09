@@ -51,3 +51,17 @@ export class ValidationError extends Error {
     this.name = 'ValidationError';
   }
 }
+
+/**
+ * ネットワークエラー
+ */
+export class NetworkError extends Error {
+  constructor(
+    message: string,
+    public statusCode?: number,
+    public cause?: Error
+  ) {
+    super(message);
+    this.name = 'NetworkError';
+  }
+}

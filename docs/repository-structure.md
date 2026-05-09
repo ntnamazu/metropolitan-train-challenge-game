@@ -10,20 +10,18 @@ railway-game/
 │   ├── repositories/             # データレイヤー
 │   ├── stores/                   # 状態管理 (Zustand)
 │   ├── types/                    # 型定義
-│   ├── hooks/                    # カスタムReact Hooks
-│   ├── utils/                    # ユーティリティ関数
+│   ├── hooks/                    # カスタムReact Hooks (将来追加予定)
+│   ├── utils/                    # ユーティリティ関数 (将来追加予定)
 │   ├── App.tsx                   # Appコンポーネント
 │   ├── main.tsx                  # エントリーポイント
 │   └── index.css                 # グローバルスタイル
 ├── public/                       # 公開ディレクトリ (静的ファイル)
-│   ├── data/                     # ゲームデータ (JSON)
-│   ├── images/                   # 画像ファイル
-│   └── index.html                # HTMLテンプレート
+│   └── data/                     # ゲームデータ (JSON)
 ├── tests/                        # テストコード
 │   ├── unit/                     # ユニットテスト
-│   ├── integration/              # 統合テスト
 │   └── setup.ts                  # テストセットアップ
 ├── docs/                         # プロジェクトドキュメント
+│   ├── ideas/                    # ブレインストーミング・調査メモ
 │   ├── product-requirements.md   # PRD
 │   ├── functional-design.md      # 機能設計書
 │   ├── architecture.md           # アーキテクチャ設計書
@@ -31,18 +29,26 @@ railway-game/
 │   ├── development-guidelines.md # 開発ガイドライン
 │   └── glossary.md               # 用語集
 ├── .claude/                      # Claude Code設定
-│   ├── commands/                 # スラッシュコマンド
+│   ├── commands/                 # スラッシュコマンド (.md)
+│   ├── agents/                   # サブエージェント定義
 │   └── skills/                   # タスクモード別スキル
+├── .husky/                       # Git フック設定
 ├── .steering/                    # ステアリングファイル (作業履歴として保持)
 ├── .devcontainer/                # Dev Container設定
+├── index.html                    # Vite エントリーポイント
 ├── package.json                  # npm設定
 ├── tsconfig.json                 # TypeScript設定
 ├── vite.config.ts                # Vite設定
-├── tailwind.config.js            # Tailwind CSS設定
 ├── vitest.config.ts              # Vitest設定
 ├── eslint.config.js              # ESLint設定
 ├── .prettierrc                   # Prettier設定
+├── .prettierignore               # Prettier除外設定
+├── Dockerfile                    # Dockerイメージ定義
+├── docker-compose.yml            # Docker開発環境設定
+├── docker-compose.prod.yml       # Docker本番環境設定
+├── .env.example                  # 環境変数テンプレート
 ├── .gitignore                    # Git除外設定
+├── THIRD_PARTY_LICENSE           # サードパーティライセンス
 ├── README.md                     # プロジェクト概要
 └── CLAUDE.md                     # Claude Code用プロジェクトメモリ
 ```
@@ -81,11 +87,12 @@ components/
 │   ├── VehicleCard.tsx
 │   └── LineCard.tsx
 ├── common/                 # 共通コンポーネント
-│   ├── Button.tsx
-│   ├── Modal.tsx
-│   ├── ProgressBar.tsx
-│   ├── Timer.tsx
-│   └── LoadingSpinner.tsx
+│   ├── Button.tsx          # ✅ 実装済み
+│   ├── ProgressBar.tsx     # ✅ 実装済み
+│   ├── Modal.tsx           # 🔲 将来追加予定
+│   ├── RailwayLinePhoto.tsx  # 🔲 将来追加予定 (路線写真 + 帰属表示)
+│   ├── Timer.tsx           # 🔲 将来追加予定
+│   └── LoadingSpinner.tsx  # 🔲 将来追加予定
 └── layout/                 # レイアウトコンポーネント
     ├── Header.tsx
     ├── Footer.tsx
@@ -119,7 +126,8 @@ services/
 ├── PuzzleEngine.ts         # パズルエンジン
 ├── ProgressManager.ts      # 進捗管理
 ├── BadgeSystem.ts          # 実績システム
-└── DailyChallengeManager.ts # デイリーチャレンジ管理
+├── DailyChallengeManager.ts # デイリーチャレンジ管理
+└── instances.ts            # サービスクラスのシングルトンインスタンス管理
 ```
 
 **配置ファイル**:
@@ -132,6 +140,7 @@ services/
 - PuzzleEngine: パズル検証ロジック
 - ProgressManager: プレイヤー進捗管理
 - BadgeSystem: 実績システム
+- instances.ts: 各サービスクラスのシングルトンインスタンスをエクスポートするエントリポイント
 
 **命名規則**:
 - クラスファイル: PascalCase + 役割接尾辞 (Manager, Engine, System)
@@ -342,29 +351,22 @@ public/images/
 
 **役割**: 個別のクラス・関数のテスト
 
-**構造**:
+**構造** (✅ = 実装済み、🔲 = 将来追加予定):
 ```
 tests/unit/
 └── src/                    # srcディレクトリと同じ構造
-    ├── components/
+    ├── components/         # 🔲 将来追加予定
     │   ├── quiz/
     │   │   ├── QuizContainer.test.tsx
-    │   │   ├── QuizQuestion.test.tsx
-    │   │   └── QuizChoices.test.tsx
-    │   ├── puzzle/
-    │   │   ├── PuzzleContainer.test.tsx
-    │   │   └── RailwayMap.test.tsx
+    │   │   └── ...
     │   └── common/
-    │       ├── Button.test.tsx
-    │       └── Modal.test.tsx
-    ├── services/
-    │   ├── QuestManager.test.ts
+    │       └── Button.test.tsx
+    ├── services/           # ✅ 実装済み
     │   ├── QuizEngine.test.ts
-    │   ├── PuzzleEngine.test.ts
-    │   └── BadgeSystem.test.ts
-    ├── repositories/
+    │   └── ProgressManager.test.ts
+    ├── repositories/       # ✅ 実装済み
     │   └── PlayerDataRepository.test.ts
-    └── utils/
+    └── utils/              # 🔲 将来追加予定
         ├── date.test.ts
         └── validation.test.ts
 ```
@@ -374,13 +376,13 @@ tests/unit/
 - 例: `QuestManager.ts` → `QuestManager.test.ts`
 - 例: `QuizContainer.tsx` → `QuizContainer.test.tsx`
 
-#### integration/ (統合テスト)
+#### integration/ (統合テスト) — 将来追加予定
 
 **役割**: 複数のコンポーネントを組み合わせたテスト
 
-**構造**:
+**構造** (将来の実装例):
 ```
-tests/integration/
+tests/integration/          # 将来追加予定 (現時点では未作成)
 ├── quest-flow.test.ts      # クエストプレイフロー
 ├── daily-challenge.test.ts # デイリーチャレンジ
 └── level-up.test.ts        # レベルアップ処理
@@ -393,6 +395,7 @@ tests/integration/
 ### docs/ (ドキュメントディレクトリ)
 
 **配置ドキュメント**:
+- `ideas/`: ブレインストーミング・技術調査メモ (自由形式、`/setup-project` 実行時に自動参照)
 - `product-requirements.md`: プロダクト要求定義書 (PRD)
 - `functional-design.md`: 機能設計書
 - `architecture.md`: アーキテクチャ設計書
@@ -407,18 +410,23 @@ tests/integration/
 **構造**:
 ```
 .claude/
-├── commands/               # スラッシュコマンド
-└── skills/                 # タスクモード別スキル
-    ├── prd-writing/
-    ├── functional-design/
-    ├── architecture-design/
-    ├── repository-structure/
-    ├── development-guidelines/
-    ├── glossary-creation/
-    ├── steering/
-    ├── review-docs/
-    ├── add-feature/
-    └── setup-project/
+├── commands/               # スラッシュコマンド (.md ファイル)
+│   ├── add-feature.md      # /add-feature コマンド
+│   ├── review-docs.md      # /review-docs コマンド
+│   └── setup-project.md    # /setup-project コマンド
+├── agents/                 # サブエージェント定義
+│   ├── doc-reviewer.md     # ドキュメントレビュー専用エージェント
+│   └── implementation-validator.md # 実装検証専用エージェント
+├── skills/                 # タスクモード別スキル
+│   ├── prd-writing/
+│   ├── functional-design/
+│   ├── architecture-design/
+│   ├── repository-structure/
+│   ├── development-guidelines/
+│   ├── glossary-creation/
+│   └── steering/
+├── settings.json           # Claude Code プロジェクト設定
+└── settings.local.json     # ローカル設定 (gitignore推奨)
 ```
 
 ### .devcontainer/ (Dev Container設定)
@@ -501,7 +509,6 @@ tests/integration/
 |------------|--------|---------|
 | TypeScript設定 | プロジェクトルート | tsconfig.json |
 | Vite設定 | プロジェクトルート | vite.config.ts |
-| Tailwind設定 | プロジェクトルート | tailwind.config.js |
 | ESLint設定 | プロジェクトルート | eslint.config.js |
 | Prettier設定 | プロジェクトルート | .prettierrc |
 | Vitest設定 | プロジェクトルート | vitest.config.ts |
@@ -757,10 +764,13 @@ node_modules/
 # ビルド成果物
 dist/
 build/
+coverage/          # テストカバレッジ (生成物のため除外)
 
-# 環境変数
+# 環境変数 (.env.example はテンプレートとして管理対象)
 .env
 .env.local
+.env.development
+.env.production
 
 # ログファイル
 *.log
@@ -770,14 +780,13 @@ build/
 Thumbs.db
 
 # IDE設定
-.vscode/
 .idea/
-
-# テストカバレッジ
-coverage/
 ```
 
-**注意**: `.steering/` はGit管理します(知識ベースとして履歴を保持するため)
+**注意**: 
+- `.steering/` はGit管理します(知識ベースとして履歴を保持するため)
+- `.vscode/` はチーム共有設定のためGit管理します
+- `.env.example` は環境変数のテンプレートとしてGit管理します
 
 ### .prettierignore, .eslintignore
 

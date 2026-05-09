@@ -1,5 +1,8 @@
 # 機能設計書 (Functional Design Document)
 
+**更新日**: 2026-05-08
+**関連ドキュメント**: [product-requirements.md](./product-requirements.md), [architecture.md](./architecture.md)
+
 ## システム構成図
 
 ```mermaid
@@ -58,15 +61,7 @@ graph TB
 
 ## 技術スタック
 
-| 分類 | 技術 | 選定理由 |
-|------|------|----------|
-| 言語 | TypeScript | 型安全性、開発効率、メンテナンス性 |
-| UIフレームワーク | React | コンポーネント設計、豊富なエコシステム |
-| 状態管理 | Zustand | シンプルで軽量、学習コストが低い |
-| スタイリング | Tailwind CSS | レスポンシブデザイン、開発速度 |
-| データ保存 | localStorage API | ブラウザネイティブ、ユーザー登録不要 |
-| ビルドツール | Vite | 高速なHMR、最新のビルド設定 |
-| テストフレームワーク | Vitest + React Testing Library | Viteとの統合、コンポーネントテスト |
+参照: [アーキテクチャ設計書 - テクノロジースタック](./architecture.md#テクノロジースタック)
 
 ## データモデル定義
 
@@ -155,6 +150,25 @@ interface PuzzleConstraint {
 }
 ```
 
+### エンティティ: ChallengeData(チャレンジデータ)
+
+```typescript
+interface ChallengeData {
+  id: string;                           // チャレンジID
+  type: ChallengeType;                  // チャレンジ種別
+  title: string;                        // タイトル
+  description: string;                  // 説明
+  timeLimit: number;                    // 制限時間 (秒)
+  steps: (QuizQuestion | PuzzleData)[]; // チャレンジ内のステップ
+  requiredScore?: number;               // クリアに必要なスコア
+}
+
+type ChallengeType =
+  | 'time_attack'  // タイムアタック: 制限時間内に複数ステップをクリア
+  | 'no_miss'      // ノーミス: 一度も失敗せずに全ステップをクリア
+  | 'combo';       // コンボ: 連続正解でボーナスを獲得
+```
+
 ### エンティティ: RailwayMap(路線図)
 
 ```typescript
@@ -178,6 +192,17 @@ interface RailwayLine {
   color: string;                   // 路線カラー (例: "#9ACD32")
   category: 'jr' | 'private' | 'metro'; // 分類
   stations: string[];              // 駅IDの順序付きリスト
+  quizPhotos: RailwayPhoto[];      // クイズ・フィードバック画面用写真プール (約5枚)
+  feedbackPhotos: RailwayPhoto[];  // フィードバック専用写真プール (当初は空配列)
+  unlockPhoto?: RailwayPhoto;      // 路線アンロック演出用写真 (1枚)
+}
+
+interface RailwayPhoto {
+  imageUrl: string;                // 画像URL (Wikimedia CommonsのURLまたはローカルパス)
+  photographer: string;            // 撮影者名
+  license: 'CC0' | 'CC BY' | 'CC BY-SA'; // ライセンス種別 (CC BY-NCなど非商用限定は使用しない)
+  licenseVersion?: string;         // ライセンスバージョン (例: "4.0")
+  commonsPageUrl: string;          // Wikimedia CommonsページのURL
 }
 
 interface Connection {
@@ -344,6 +369,21 @@ interface RailwayLinePhotoProps {
 - ユーザー入力の受付
 - フィードバック表示
 
+**インターフェース**:
+```typescript
+interface QuizUIProps {
+  questions: QuizQuestion[];
+  railwayLine: RailwayLine;
+  onComplete: (results: QuizResult[]) => void;
+}
+
+interface PuzzleUIProps {
+  puzzleData: PuzzleData;
+  railwayMap: RailwayMap;
+  onComplete: (result: PuzzleResult) => void;
+}
+```
+
 ### ゲームロジックレイヤー
 
 #### QuestManager: クエスト管理
@@ -479,6 +519,22 @@ interface BadgeDefinition {
 interface BadgeCondition {
   type: 'complete_quest' | 'complete_line' | 'quiz_streak' | 'play_days';
   requirement: any;
+}
+```
+
+#### DailyChallengeManager: デイリーチャレンジ管理
+
+**責務**:
+- 日付に基づくデイリークエストの提供
+- 完了状態の管理
+- ボーナスポイントの付与
+
+**インターフェース**:
+```typescript
+class DailyChallengeManager {
+  getDailyQuest(date: string): Quest;
+  isCompleted(date: string): boolean;
+  complete(date: string, bonusPoints: number): DailyChallengeProgress;
 }
 ```
 
@@ -740,6 +796,8 @@ function countTransfers(path: string[], railwayMap: RailwayMap): number {
 
 制限時間内にクリアしたかどうかと、制約条件の達成度合いでスコアを算出します。
 
+> **注記**: 以下のスコア配点(基本50点・時間ボーナス30点・効率ボーナス20点)はPRDに記載のない設計判断です。PRDでは「正しい経路を選択すると成功」という合否判定のみが要件定義されています。スコア方式の変更が必要な場合はPRDの受け入れ条件に追記してください。
+
 ```typescript
 function calculatePuzzleScore(
   selectedPath: string[],
@@ -855,10 +913,12 @@ function checkLevelUp(progress: PlayerProgress): DifficultyLevel | null {
 ### クイズ画面
 
 **表示項目**:
+- 路線写真(RailwayLinePhotoコンポーネント): 演出用。`quizPhotos` プールからランダムに1枚選択。写真の下に帰属表示。
 - 問題文
 - 4つの選択肢(A, B, C, D)
 - 残り問題数インジケーター
 - 回答後のフィードバック(正解/不正解、解説)
+  - フィードバック時は `feedbackPhotos` が空でなければそちらを、空なら `quizPhotos` から表示継続
 
 **カラーコーディング**:
 - 正解: 緑色(#10B981)

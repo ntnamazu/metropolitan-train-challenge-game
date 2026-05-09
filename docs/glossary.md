@@ -4,7 +4,7 @@
 
 このドキュメントは、「首都圏鉄道マスター」プロジェクト内で使用される用語の定義を管理します。
 
-**更新日**: 2026-05-05
+**更新日**: 2026-05-08
 
 ## ドメイン用語
 
@@ -29,6 +29,32 @@
 **データモデル**: `src/types/quest.ts` の `Quest` インターフェース
 
 **英語表記**: Quest
+
+### クエストセッション (Quest Session)
+
+**定義**: クエスト開始時に作成されるプレイセッションの状態オブジェクト。`QuestManager.startQuest()` が返す。
+
+**説明**:
+クエストセッションはセッションIDとクエストID、現在のステップインデックス、開始日時、各ステップの結果を保持します。セッションを通じてクエストの進行状況を追跡します。
+
+**主要フィールド**:
+- `sessionId`: セッションの一意ID
+- `questId`: 対象クエストのID
+- `currentStepIndex`: 現在のステップ番号 (0: クイズ、1: パズル、2: チャレンジ)
+- `startedAt`: セッション開始日時
+- `results`: 各ステップの結果 (`StepResult[]`)
+
+**関連用語**:
+- [クエスト](#クエスト-quest): セッションの対象
+- [QuestManager](#questmanager): セッションを作成・管理するサービス
+
+**使用例**:
+- `startQuest("quest-yamanote-01")` を呼び出してセッションを開始する
+- セッションIDを使って `completeStep()` でステップ完了を記録する
+
+**データモデル**: `docs/functional-design.md` の `QuestSession` インターフェース
+
+**英語表記**: Quest Session
 
 ### クイズ (Quiz)
 
@@ -345,6 +371,41 @@ CC0・CC BY・CC BY-SAのみ使用可。CC BY-NCなど非商用限定ライセ�
 
 **英語表記**: Unlock
 
+### 報酬 (Reward)
+
+**定義**: クエストをクリアした際にプレイヤーに付与されるアイテムの共通型。種別とIDで管理される。
+
+**説明**:
+報酬は `QuestManager.completeQuest()` が返す配列として処理されます。報酬の種別によって、路線アンロック・車両カード獲得・バッジ付与・ポイント付与のいずれかが行われます。
+
+**報酬の種別**:
+| type | 説明 |
+|------|------|
+| `railway_line` | 新しい路線のアンロック |
+| `vehicle_card` | 車両カードの獲得 |
+| `badge` | バッジの獲得 |
+| `points` | ポイントの付与 |
+
+**主要フィールド**:
+- `type`: 報酬種別
+- `id`: 報酬ID
+- `name`: 報酬名
+- `rarity`: レア度 (`common` / `rare` / `legendary`、車両カードとバッジのみ)
+
+**関連用語**:
+- [クエスト](#クエスト-quest): 報酬が設定されるエンティティ
+- [QuestManager](#questmanager): `completeQuest()` で報酬を返す
+- [車両カード](#車両カード-vehicle-card): 報酬種別の一つ
+- [バッジ](#バッジ-badge): 報酬種別の一つ
+
+**使用例**:
+- クエストクリア時に `completeQuest(sessionId)` が `Reward[]` を返す
+- `rewards: [{ type: 'vehicle_card', id: 'e235', name: 'E235系', rarity: 'rare' }]`
+
+**データモデル**: `src/types/quest.ts` の `Reward` インターフェース
+
+**英語表記**: Reward
+
 ## 技術用語
 
 プロジェクトで使用している技術・フレームワーク・ツールに関する用語。
@@ -358,7 +419,7 @@ CC0・CC BY・CC BY-SAのみ使用可。CC BY-NCなど非商用限定ライセ�
 **本プロジェクトでの用途**:
 全てのUIコンポーネントをReactで実装しています。画面表示、ユーザーインタラクション、状態管理に使用。
 
-**バージョン**: 18.x
+**バージョン**: 19.x
 
 **選定理由**:
 - コンポーネント設計による再利用性の高さ
@@ -410,7 +471,7 @@ CC0・CC BY・CC BY-SAのみ使用可。CC BY-NCなど非商用限定ライセ�
 **本プロジェクトでの用途**:
 開発サーバーの起動、本番ビルド、TypeScriptのトランスパイルに使用。
 
-**バージョン**: 6.x
+**バージョン**: 8.x
 
 **選定理由**:
 - 高速な開発サーバー起動(数秒)
@@ -461,7 +522,7 @@ CC0・CC BY・CC BY-SAのみ使用可。CC BY-NCなど非商用限定ライセ�
 **本プロジェクトでの用途**:
 全てのコンポーネントのスタイリングに使用。レスポンシブデザインに対応。
 
-**バージョン**: 3.x
+**バージョン**: 4.x
 
 **選定理由**:
 - 開発速度の向上(HTMLとCSSを行き来しない)
@@ -475,7 +536,7 @@ CC0・CC BY・CC BY-SAのみ使用可。CC BY-NCなど非商用限定ライセ�
 **関連ドキュメント**:
 - [アーキテクチャ設計書](./architecture.md#技術スタック)
 
-**設定ファイル**: `tailwind.config.js`
+**設定ファイル**: なし (v4では`@tailwindcss/vite`プラグイン経由で設定。独立したJavaScript設定ファイル不要)
 
 ### Vitest
 
@@ -801,6 +862,90 @@ UIレイヤー (components/)
 - [バッジ](#バッジ-badge): 管理対象のエンティティ
 - [ゲームロジックレイヤー](#レイヤードアーキテクチャ-layered-architecture): 所属するレイヤー
 
+### DailyChallengeManager
+
+**定義**: 日付に基づくデイリークエストの提供と完了状態の管理を行うサービスクラス。
+
+**責務**:
+- 日付に基づくデイリークエストの提供
+- 完了状態の管理
+- ボーナスポイントの付与
+
+**主要メソッド**:
+- `getDailyQuest(date: string): Quest`
+- `isCompleted(date: string): boolean`
+- `complete(date: string, bonusPoints: number): DailyChallengeProgress`
+
+**実装箇所**: `src/services/DailyChallengeManager.ts`
+
+**関連用語**:
+- [デイリーチャレンジ](#デイリーチャレンジ-daily-challenge): 管理対象のエンティティ
+- [ゲームロジックレイヤー](#レイヤードアーキテクチャ-layered-architecture): 所属するレイヤー
+
+## UIコンポーネント
+
+UIレイヤーで使用される主要なReactコンポーネント。
+
+### RailwayLinePhoto
+
+**定義**: 路線写真と帰属表示を一体で表示するReactコンポーネント。
+
+**責務**:
+- `RailwayPhoto` オブジェクトを受け取り、写真と帰属テキストを表示する
+- 帰属テキストは写真の下にグレーの小テキストで常時表示する
+
+**実装箇所**: `src/components/common/RailwayLinePhoto.tsx`
+
+**関連用語**:
+- [路線写真](#路線写真-railway-line-photo): 表示対象のデータ
+- [帰属表示](#帰属表示-attribution): 必須で表示するクレジット情報
+
+## リポジトリクラス
+
+データレイヤーで使用される主要なリポジトリクラス。データの永続化・取得・キャッシュ管理を担当し、ビジネスロジックは実装しない。
+
+### RailwayDataRepository
+
+**定義**: 路線データの読み込みと駅・路線情報の提供を担当するリポジトリクラス。
+
+**責務**:
+- 路線データの読み込み
+- 駅・路線情報の提供
+- 経路探索
+
+**主要メソッド**:
+- `loadRailwayMap(): RailwayMap`
+- `getStationById(stationId: string): Station`
+- `getLineById(lineId: string): RailwayLine`
+- `findPath(fromStationId: string, toStationId: string, constraints?: PathConstraints): Path[]`
+
+**実装箇所**: `src/repositories/RailwayDataRepository.ts`
+
+**関連用語**:
+- [路線図](#路線図-railway-map): 返却するデータ型
+- [データレイヤー](#レイヤードアーキテクチャ-layered-architecture): 所属するレイヤー
+
+### PlayerDataRepository
+
+**定義**: プレイヤーデータのローカルストレージへの保存と読み込みを担当するリポジトリクラス。
+
+**責務**:
+- ローカルストレージへのプレイヤー進捗の保存
+- プレイヤー進捗の読み込み
+- データの存在確認とリセット
+
+**主要メソッド**:
+- `save(progress: PlayerProgress): void`
+- `load(): PlayerProgress | null`
+- `exists(): boolean`
+- `reset(): void`
+
+**実装箇所**: `src/repositories/PlayerDataRepository.ts`
+
+**関連用語**:
+- [プレイヤー進捗](#プレイヤー進捗-player-progress): 保存・読み込み対象のデータ型
+- [データレイヤー](#レイヤードアーキテクチャ-layered-architecture): 所属するレイヤー
+
 ## ステータス・状態
 
 システム内で使用される各種ステータスの定義。
@@ -833,6 +978,35 @@ type QuestStatus = 'in_progress' | 'completed' | 'failed';
 ```
 
 **実装箇所**: `src/types/quest.ts`
+
+### クイズステータス (Quiz Status)
+
+**定義**: クイズ回答セッションの状態を示す列挙型。
+
+**取りうる値**:
+
+| ステータス | 意味 | 遷移条件 | 次の状態 |
+|----------|------|---------|---------|
+| `answering` | 回答中 | クイズ表示時の初期状態 | `correct`, `incorrect` |
+| `correct` | 正解 | 正しい選択肢を回答 | - |
+| `incorrect` | 不正解 | 誤った選択肢を回答 | - |
+
+**状態遷移図**:
+```mermaid
+stateDiagram-v2
+    [*] --> answering: クイズ表示
+    answering --> correct: 正しい選択肢を選択
+    answering --> incorrect: 誤った選択肢を選択
+    correct --> [*]
+    incorrect --> [*]
+```
+
+**実装**:
+```typescript
+type QuizStatus = 'answering' | 'correct' | 'incorrect';
+```
+
+**実装箇所**: `src/types/quiz.ts`
 
 ### パズルステータス (Puzzle Status)
 
@@ -991,60 +1165,121 @@ try {
 }
 ```
 
+### NetworkError
+
+**クラス名**: `NetworkError`
+
+**継承元**: `Error`
+
+**発生条件**:
+HTTPリクエストが失敗した場合（ネットワーク切断、非200レスポンスなど）に発生します。
+
+**エラーメッセージフォーマット**:
+```
+HTTPエラー: [ステータスコード] [ステータステキスト]
+```
+
+**対処方法**:
+- **ユーザー**: ネットワーク接続を確認
+- **開発者**: `statusCode` プロパティでHTTPステータスを確認
+
+**ログレベル**: ERROR
+
+**実装箇所**: `src/utils/errors.ts`
+
+**使用例**:
+```typescript
+// エラーのスロー
+if (!response.ok) {
+  throw new NetworkError(
+    `HTTPエラー: ${response.status} ${response.statusText}`,
+    response.status
+  );
+}
+
+// エラーのハンドリング
+try {
+  const data = await robustFetch(url);
+} catch (error) {
+  if (error instanceof NetworkError) {
+    console.error(`ネットワークエラー: ${error.message}, ステータス: ${error.statusCode}`);
+  }
+}
+```
+
 ## 索引
 
 ### あ行
 - [アーキテクチャ用語](#アーキテクチャ用語) - セクション
 - [アンロック](#アンロック-unlock) - ドメイン用語
 
+### え行
+- [駅](#駅-station) - ドメイン用語
+
 ### か行
 - [クエスト](#クエスト-quest) - ドメイン用語
-- [クイズ](#クイズ-quiz) - ドメイン用語
+- [クエストセッション](#クエストセッション-quest-session) - ドメイン用語
 - [クエストステータス](#クエストステータス-quest-status) - ステータス
+- [クイズ](#クイズ-quiz) - ドメイン用語
+- [クイズステータス](#クイズステータス-quiz-status) - ステータス
+- [車両カード](#車両カード-vehicle-card) - ドメイン用語
 
 ### さ行
 - [サービスクラス](#サービスクラス) - セクション
-- [駅](#駅-station) - ドメイン用語
 - [ステータス・状態](#ステータス状態) - セクション
 
 ### た行
 - [チャレンジ](#チャレンジ-challenge) - ドメイン用語
 - [デイリーチャレンジ](#デイリーチャレンジ-daily-challenge) - ドメイン用語
-- [難易度レベル](#難易度レベル-difficulty-level) - ドメイン用語
 - [ドメイン用語](#ドメイン用語) - セクション
+
+### な行
+- [難易度レベル](#難易度レベル-difficulty-level) - ドメイン用語
 
 ### は行
 - [バッジ](#バッジ-badge) - ドメイン用語
 - [パズル](#パズル-puzzle) - ドメイン用語
 - [パズルステータス](#パズルステータス-puzzle-status) - ステータス
 - [プレイヤー進捗](#プレイヤー進捗-player-progress) - ドメイン用語
+- [報酬](#報酬-reward) - ドメイン用語
 
 ### ら行
 - [略語・頭字語](#略語頭字語) - セクション
+- [リポジトリクラス](#リポジトリクラス) - セクション
 - [路線](#路線-railway-line) - ドメイン用語
 - [路線図](#路線図-railway-map) - ドメイン用語
+- [路線写真](#路線写真-railway-line-photo) - ドメイン用語
 - [レイヤードアーキテクチャ](#レイヤードアーキテクチャ-layered-architecture) - アーキテクチャ用語
 
 ### A-Z
+- [Attribution (帰属表示)](#帰属表示-attribution) - ドメイン用語
 - [BadgeSystem](#badgesystem) - サービスクラス
 - [CI/CD](#cicd) - 略語
+- [DailyChallengeManager](#dailychallengemanager) - サービスクラス
 - [DAU](#dau) - 略語
 - [ESLint](#eslint) - 技術用語
 - [KPI](#kpi) - 略語
 - [MVP](#mvp) - 略語
+- [NetworkError](#networkerror) - エラー
 - [NotFoundError](#notfounderror) - エラー
+- [PlayerDataRepository](#playerdatarepository) - リポジトリクラス
 - [Prettier](#prettier) - 技術用語
 - [PR](#pr) - 略語
 - [ProgressManager](#progressmanager) - サービスクラス
 - [PuzzleEngine](#puzzleengine) - サービスクラス
 - [QuestManager](#questmanager) - サービスクラス
+- [QuestSession (クエストセッション)](#クエストセッション-quest-session) - ドメイン用語
 - [QuizEngine](#quizengine) - サービスクラス
+- [RailwayDataRepository](#railwaydatarepository) - リポジトリクラス
+- [RailwayLinePhoto](#railwaylinephoto) - UIコンポーネント
 - [React](#react) - 技術用語
+- [Reward (報酬)](#報酬-reward) - ドメイン用語
 - [StorageError](#storageerror) - エラー
 - [Tailwind CSS](#tailwind-css) - 技術用語
 - [TypeScript](#typescript) - 技術用語
 - [UI](#ui) - 略語
 - [ValidationError](#validationerror) - エラー
+- [VehicleCard (車両カード)](#車両カード-vehicle-card) - ドメイン用語
 - [Vite](#vite) - 技術用語
 - [Vitest](#vitest) - 技術用語
 - [Zustand](#zustand) - 技術用語

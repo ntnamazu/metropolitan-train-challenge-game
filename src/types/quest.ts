@@ -63,6 +63,11 @@ export interface Quest {
 }
 
 /**
+ * クエストセッションの状態
+ */
+export type QuestStatus = 'in_progress' | 'completed' | 'failed';
+
+/**
  * クエストセッション
  */
 export interface QuestSession {

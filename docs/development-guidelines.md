@@ -701,11 +701,15 @@ describe('Quest Flow', () => {
 
 **実行方法**:
 ```bash
-# コンポーネントテスト単体実行
+# ローカル環境
 npm run test -- --testPathPattern=components
+
+# Docker環境（推奨）
+docker compose run --rm app npm run test -- --testPathPattern=components
 
 # または全テスト実行に含まれる
 npm run test
+docker compose run --rm app npm run test
 ```
 
 **例**:
@@ -785,7 +789,7 @@ it('should work correctly', () => { });
     "coverage": {
       "provider": "v8",
       "reporter": ["text", "html", "lcov"],
-      "threshold": {
+      "thresholds": {
         "global": {
           "branches": 80,
           "functions": 80,
@@ -838,6 +842,11 @@ it('should work correctly', () => { });
 - [ ] 機密情報がハードコードされていないか
 - [ ] XSS対策がされているか
 
+**アーキテクチャ**:
+- [ ] レイヤー間の依存方向が正しいか（UIレイヤー→サービス→リポジトリ）
+- [ ] repositories/からservices/またはcomponents/に依存していないか
+- [ ] 循環依存が発生していないか
+
 ### レビューコメントの書き方
 
 **建設的なフィードバック**:
@@ -883,11 +892,27 @@ const station = stationMap.get(stationId); // O(1)
 
 | ツール | バージョン | インストール方法 |
 |--------|-----------|-----------------|
-| Node.js | v24.11.0 | https://nodejs.org/ |
-| npm | 11.x | Node.jsに同梱 |
+| Docker Desktop | 最新版 | https://www.docker.com/products/docker-desktop/ |
+| VS Code | 最新版 | https://code.visualstudio.com/ |
+| VS Code Dev Containers拡張機能 | 最新版 | VS Code拡張機能マーケットプレイスから |
 | Git | 最新版 | https://git-scm.com/ |
+| Node.js | v24.11.0 | ローカル開発時のみ必要: https://nodejs.org/ |
+| npm | 11.x | Node.jsに同梱（ローカル開発時のみ） |
 
 ### セットアップ手順
+
+#### devcontainer（推奨）
+
+```bash
+# 1. リポジトリのクローン
+git clone <repository-url>
+cd railway-game
+```
+
+VS Codeでフォルダを開き、「Reopen in Container」を選択してdevcontainerを起動します。
+起動後、`http://localhost:5173` でアプリケーションにアクセス可能です。
+
+#### ローカル環境（devcontainerが使えない場合）
 
 ```bash
 # 1. リポジトリのクローン
@@ -970,20 +995,29 @@ npm run format
 ```yaml
 # .github/workflows/ci.yml
 name: CI
-on: [push, pull_request]
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run typecheck
-      - run: npm run test
-      - run: npm run build
+
+      - name: Run lint
+        run: docker compose run --rm app npm run lint
+
+      - name: Run typecheck
+        run: docker compose run --rm app npm run typecheck
+
+      - name: Run tests with coverage
+        run: docker compose run --rm app npm run test:coverage
+
+      - name: Build
+        run: docker compose run --rm app npm run build
 ```
 
 ### Pre-commit フック (Husky 9.x + lint-staged)
@@ -1056,36 +1090,36 @@ npm run typecheck
 
 ## 実装完了前チェックリスト
 
-実装完了前に確認:
+実装完了前に以下の全項目を確認してください。
 
-### コード品質
+#### コード品質
 - [ ] 命名が明確で一貫している
 - [ ] 関数が単一の責務を持っている
 - [ ] マジックナンバーがない
 - [ ] 型注釈が適切に記載されている
 - [ ] エラーハンドリングが実装されている
 
-### セキュリティ
+#### セキュリティ
 - [ ] 入力検証が実装されている
 - [ ] 機密情報がハードコードされていない
 - [ ] XSS対策がされている
 
-### パフォーマンス
+#### パフォーマンス
 - [ ] 適切なデータ構造を使用している
 - [ ] 不要な計算を避けている
 - [ ] 遅延読み込みが適切に使われている
 
-### テスト
+#### テスト
 - [ ] ユニットテストが書かれている
 - [ ] テストがパスする
 - [ ] エッジケースがカバーされている
 
-### ドキュメント
+#### ドキュメント
 - [ ] 関数・クラスにTSDocコメントがある
 - [ ] 複雑なロジックにコメントがある
 - [ ] TODOやFIXMEが記載されている (該当する場合)
 
-### ツール
+#### ツール
 - [ ] Lintエラーがない
 - [ ] 型チェックがパスする
 - [ ] フォーマットが統一されている

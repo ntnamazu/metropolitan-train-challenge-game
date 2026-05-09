@@ -51,6 +51,11 @@ export interface PuzzleData {
 }
 
 /**
+ * パズルセッションの状態
+ */
+export type PuzzleStatus = 'in_progress' | 'completed' | 'failed';
+
+/**
  * パズルの状態
  */
 export interface PuzzleState {
@@ -61,7 +66,7 @@ export interface PuzzleState {
   /** 残り時間 */
   remainingTime: number;
   /** 状態 */
-  status: 'in_progress' | 'completed' | 'failed';
+  status: PuzzleStatus;
 }
 
 /**
