@@ -18,7 +18,7 @@ export function RailwayLinePhoto({ photo }: RailwayLinePhotoProps) {
         src={photo.imageUrl}
         alt=""
         aria-hidden="true"
-        className="w-full h-40 object-cover rounded-lg"
+        className="w-full rounded-lg"
         loading="lazy"
       />
       <p className="text-xs text-gray-400 mt-1 px-1">
