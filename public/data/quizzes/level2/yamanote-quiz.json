@@ -1,0 +1,29 @@
+[
+  {
+    "id": "quiz-yamanote-01",
+    "category": "company_features",
+    "question": "山手線を運営している会社はどこ？",
+    "choices": ["JR東日本", "東京メトロ", "東急電鉄", "小田急電鉄"],
+    "correctIndex": 0,
+    "explanation": "山手線はJR東日本が運営しています。首都圏の主要ターミナル駅を結ぶ環状線です。",
+    "difficulty": 2
+  },
+  {
+    "id": "quiz-yamanote-02",
+    "category": "line_name",
+    "question": "山手線の路線カラーは何色？",
+    "choices": ["黄緑（うぐいす色）", "黄色", "オレンジ色", "青色"],
+    "correctIndex": 0,
+    "explanation": "山手線の路線カラーは黄緑（うぐいす色）です。駅の案内サインや車体の帯に使われています。",
+    "difficulty": 2
+  },
+  {
+    "id": "quiz-yamanote-03",
+    "category": "station_name",
+    "question": "山手線で渋谷から新宿方向に向かうとき、渋谷の次の駅はどこ？",
+    "choices": ["原宿", "恵比寿", "目黒", "代々木"],
+    "correctIndex": 0,
+    "explanation": "渋谷から新宿方向（内回り）に向かうと、次は原宿です。明治神宮の最寄り駅でもあります。",
+    "difficulty": 2
+  }
+]

@@ -1,0 +1,43 @@
+{
+  "id": "quest-yamanote-01",
+  "title": "山手線への挑戦",
+  "description": "首都圏の大動脈・山手線の知識を身につけよう",
+  "level": 2,
+  "railwayLine": "line-yamanote",
+  "steps": [
+    {
+      "type": "quiz",
+      "content": []
+    },
+    {
+      "type": "puzzle",
+      "content": {}
+    },
+    {
+      "type": "challenge",
+      "content": {}
+    }
+  ],
+  "rewards": [
+    {
+      "type": "railway_line",
+      "id": "line-yamanote",
+      "name": "山手線",
+      "rarity": "rare"
+    },
+    {
+      "type": "vehicle_card",
+      "id": "vehicle-e235-yamanote",
+      "name": "E235系 0番台（山手線）",
+      "rarity": "rare"
+    },
+    {
+      "type": "points",
+      "id": "points-200",
+      "name": "200ポイント"
+    }
+  ],
+  "unlockCondition": {
+    "requiredLevel": 2
+  }
+}

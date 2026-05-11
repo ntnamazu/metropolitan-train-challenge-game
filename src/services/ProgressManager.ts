@@ -79,14 +79,16 @@ export class ProgressManager {
     [level: number]: number;
   } {
     const counts: { [level: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0 };
+    const byLevel = progress.completedQuestsByLevel;
 
-    // クエストIDから難易度を判定（簡略化のため、ここではクエストIDに含まれる数字から判定）
-    // 実際にはクエストデータを読み込んで判定する必要がある
-    progress.completedQuestIds.forEach(() => {
-      // "quest-sobu-01" のような形式を想定
-      // レベル1のクエストのみカウント（簡略化）
-      counts[1]++;
-    });
+    if (byLevel && Object.keys(byLevel).length > 0) {
+      for (const [level, ids] of Object.entries(byLevel)) {
+        counts[parseInt(level)] = ids.length;
+      }
+    } else {
+      // 後方互換: completedQuestsByLevel 未設定の場合は全クエストをレベル1とみなす
+      counts[1] = progress.completedQuestIds.length;
+    }
 
     return counts;
   }
@@ -121,6 +123,7 @@ export class ProgressManager {
       playerId: crypto.randomUUID(),
       currentLevel: 1,
       completedQuestIds: [],
+      completedQuestsByLevel: {},
       unlockedLineIds: ['line-sobu', 'line-tobu-kamedo'],
       unlockedVehicleIds: [],
       badges: [],

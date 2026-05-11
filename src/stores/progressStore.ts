@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { PlayerProgress, Reward } from '../types';
+import type { PlayerProgress, Reward, DifficultyLevel } from '../types';
 import {
   progressManager,
   badgeSystem,
@@ -11,7 +11,11 @@ interface ProgressState {
   isLoading: boolean;
   initProgress: () => void;
   updateProgress: (progress: PlayerProgress) => void;
-  completeQuest: (questId: string, rewards: Reward[]) => void;
+  completeQuest: (
+    questId: string,
+    questLevel: DifficultyLevel,
+    rewards: Reward[]
+  ) => void;
   completeDailyChallenge: (questId: string) => void;
 }
 
@@ -33,7 +37,7 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
     set({ progress });
   },
 
-  completeQuest: (questId, rewards) => {
+  completeQuest: (questId, questLevel, rewards) => {
     const { progress, updateProgress } = get();
     if (!progress) return;
 
@@ -41,6 +45,13 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
     if (!updated.completedQuestIds.includes(questId)) {
       updated.completedQuestIds = [...updated.completedQuestIds, questId];
     }
+
+    const byLevel = { ...(updated.completedQuestsByLevel ?? {}) };
+    const levelIds = byLevel[questLevel] ?? [];
+    if (!levelIds.includes(questId)) {
+      byLevel[questLevel] = [...levelIds, questId];
+    }
+    updated.completedQuestsByLevel = byLevel;
 
     for (const reward of rewards) {
       if (reward.type === 'railway_line') {

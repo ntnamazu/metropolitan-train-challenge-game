@@ -1,0 +1,17 @@
+{
+  "id": "puzzle-yamanote-01",
+  "type": "route_selection",
+  "title": "渋谷から新宿へ",
+  "description": "渋谷駅から新宿駅まで山手線で移動してください",
+  "railwayMap": {},
+  "startStation": "st-shibuya",
+  "goalStation": "st-shinjuku",
+  "constraints": [
+    {
+      "type": "max_stations",
+      "value": 4
+    }
+  ],
+  "timeLimit": 60,
+  "correctPath": ["st-shibuya", "st-harajuku", "st-yoyogi", "st-shinjuku"]
+}

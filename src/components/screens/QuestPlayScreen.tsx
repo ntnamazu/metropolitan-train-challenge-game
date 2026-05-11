@@ -95,7 +95,7 @@ export function QuestPlayScreen() {
     try {
       await startQuest();
       const [questions, line] = await Promise.all([
-        quizRepo.loadQuizzesByQuestId(quest.id),
+        quizRepo.loadQuizzesByQuestId(quest.id, quest.level),
         railwayRepo.getLineById(quest.railwayLine).catch(() => null),
       ]);
       setQuizQuestions(questions);
@@ -121,7 +121,10 @@ export function QuestPlayScreen() {
     if (!selectedQuest) return;
     setPhase('loading');
     try {
-      const pd = await puzzleRepo.loadPuzzleByQuestId(selectedQuest.id);
+      const pd = await puzzleRepo.loadPuzzleByQuestId(
+        selectedQuest.id,
+        selectedQuest.level
+      );
       setPuzzleData(pd);
       setRailwayMap(pd.railwayMap);
       setPhase('puzzle');
@@ -140,7 +143,11 @@ export function QuestPlayScreen() {
     if (!selectedQuest) return;
     try {
       await completeQuest();
-      completeQuestProgress(selectedQuest.id, selectedQuest.rewards);
+      completeQuestProgress(
+        selectedQuest.id,
+        selectedQuest.level,
+        selectedQuest.rewards
+      );
       setShowRewardModal(true);
     } catch {
       navigate('quest-list');

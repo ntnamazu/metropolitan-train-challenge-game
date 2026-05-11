@@ -88,6 +88,8 @@ export interface PlayerProgress {
   totalPoints: number;
   /** デイリーチャレンジ進捗 */
   dailyChallenge: DailyChallengeProgress;
+  /** レベル別クリア済みクエストID (後方互換のため optional) */
+  completedQuestsByLevel?: Record<number, string[]>;
   /** 統計情報 */
   statistics: PlayerStatistics;
   /** 作成日時 */

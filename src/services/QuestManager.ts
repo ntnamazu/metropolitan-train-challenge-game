@@ -17,18 +17,36 @@ import type { RailwayDataRepository } from '../repositories/RailwayDataRepositor
 export class QuestManager {
   private questSessions: Map<string, QuestSession> = new Map();
 
+  private readonly levelQuestIds: Record<number, string[]> = {
+    1: ['quest-sobu-01', 'quest-sobu-02', 'quest-tobu-kamedo-01'],
+    2: ['quest-yamanote-01'],
+    3: [],
+    4: [],
+  };
+
   constructor(
     private _railwayDataRepository: RailwayDataRepository,
     private _quizDataRepository: QuizDataRepository,
     private _puzzleDataRepository: PuzzleDataRepository
   ) {}
 
+  private findQuestLevel(questId: string): number | null {
+    for (const [level, ids] of Object.entries(this.levelQuestIds)) {
+      if (ids.includes(questId)) return parseInt(level);
+    }
+    return null;
+  }
+
   /**
    * クエストを読み込む
    */
   async loadQuest(questId: string): Promise<Quest> {
     try {
-      // クエストIDから路線名を抽出
+      const level = this.findQuestLevel(questId);
+      if (level === null) {
+        throw new NotFoundError('Quest', questId);
+      }
+
       const match = questId.match(/quest-(.+)-(\d+)/);
       if (!match) {
         throw new NotFoundError('Quest', questId);
@@ -37,7 +55,7 @@ export class QuestManager {
       const lineName = match[1];
       const questNumber = match[2];
       const response = await fetch(
-        `/data/quests/level1/quest-${lineName}-${questNumber}.json`
+        `/data/quests/level${level}/quest-${lineName}-${questNumber}.json`
       );
 
       if (!response.ok) {
@@ -109,23 +127,14 @@ export class QuestManager {
    * 利用可能なクエストを取得
    */
   async getAvailableQuests(level: DifficultyLevel): Promise<Quest[]> {
-    // レベル1のクエストIDリスト（ハードコード）
-    const level1QuestIds = [
-      'quest-sobu-01',
-      'quest-sobu-02',
-      'quest-tobu-kamedo-01',
-    ];
-
+    const questIds = this.levelQuestIds[level] ?? [];
     const quests: Quest[] = [];
 
-    for (const questId of level1QuestIds) {
+    for (const questId of questIds) {
       try {
         const quest = await this.loadQuest(questId);
-        if (quest.level === level) {
-          quests.push(quest);
-        }
+        quests.push(quest);
       } catch {
-        // クエストが見つからない場合はスキップ
         continue;
       }
     }

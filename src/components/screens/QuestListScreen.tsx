@@ -43,10 +43,11 @@ export function QuestListScreen() {
   const progress = useProgressStore((s) => s.progress);
   const { availableQuests, isLoadingQuests, loadAvailableQuests, selectQuest } =
     useQuestStore();
+  const currentLevel = progress?.currentLevel ?? 1;
 
   useEffect(() => {
-    loadAvailableQuests();
-  }, [loadAvailableQuests]);
+    loadAvailableQuests(currentLevel);
+  }, [loadAvailableQuests, currentLevel]);
 
   const handleSelectQuest = (quest: Quest) => {
     selectQuest(quest);

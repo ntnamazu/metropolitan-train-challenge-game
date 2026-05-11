@@ -2,7 +2,7 @@
  * クイズデータリポジトリ
  */
 
-import type { QuizQuestion } from '../types';
+import type { QuizQuestion, DifficultyLevel } from '../types';
 import { NotFoundError } from '../types';
 import type { RailwayDataRepository } from './RailwayDataRepository';
 
@@ -12,7 +12,10 @@ export class QuizDataRepository {
   /**
    * クエストIDに紐づくクイズ問題を読み込む
    */
-  async loadQuizzesByQuestId(questId: string): Promise<QuizQuestion[]> {
+  async loadQuizzesByQuestId(
+    questId: string,
+    level: DifficultyLevel = 1
+  ): Promise<QuizQuestion[]> {
     try {
       // クエストIDから路線名を抽出 (例: "quest-sobu-01" → "sobu")
       const match = questId.match(/quest-(.+)-\d+/);
@@ -22,7 +25,7 @@ export class QuizDataRepository {
 
       const lineName = match[1];
       const response = await fetch(
-        `/data/quizzes/level1/${lineName}-quiz.json`
+        `/data/quizzes/level${level}/${lineName}-quiz.json`
       );
 
       if (!response.ok) {

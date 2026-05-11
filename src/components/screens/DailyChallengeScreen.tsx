@@ -11,10 +11,11 @@ export function DailyChallengeScreen() {
   const { availableQuests, loadAvailableQuests, selectQuest } = useQuestStore();
   const [dailyQuest, setDailyQuest] = useState<Quest | null>(null);
   const [isCompleted, setIsCompleted] = useState(false);
+  const currentLevel = progress?.currentLevel ?? 1;
 
   useEffect(() => {
-    loadAvailableQuests();
-  }, [loadAvailableQuests]);
+    loadAvailableQuests(currentLevel);
+  }, [loadAvailableQuests, currentLevel]);
 
   useEffect(() => {
     if (availableQuests.length === 0 || !progress) return;

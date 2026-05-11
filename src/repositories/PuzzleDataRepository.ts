@@ -2,7 +2,7 @@
  * パズルデータリポジトリ
  */
 
-import type { PuzzleData } from '../types';
+import type { PuzzleData, DifficultyLevel } from '../types';
 import { NotFoundError } from '../types';
 import type { RailwayDataRepository } from './RailwayDataRepository';
 
@@ -12,7 +12,10 @@ export class PuzzleDataRepository {
   /**
    * クエストIDに紐づくパズル問題を読み込む
    */
-  async loadPuzzleByQuestId(questId: string): Promise<PuzzleData> {
+  async loadPuzzleByQuestId(
+    questId: string,
+    level: DifficultyLevel = 1
+  ): Promise<PuzzleData> {
     try {
       // クエストIDから路線名を抽出 (例: "quest-sobu-01" → "sobu")
       const match = questId.match(/quest-(.+)-(\d+)/);
@@ -23,7 +26,7 @@ export class PuzzleDataRepository {
       const lineName = match[1];
       const questNumber = match[2];
       const response = await fetch(
-        `/data/puzzles/level1/${lineName}-puzzle-${questNumber}.json`
+        `/data/puzzles/level${level}/${lineName}-puzzle-${questNumber}.json`
       );
 
       if (!response.ok) {

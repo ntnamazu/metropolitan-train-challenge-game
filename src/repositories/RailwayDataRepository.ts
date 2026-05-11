@@ -17,28 +17,26 @@ export class RailwayDataRepository {
     }
 
     try {
-      // JR中央・総武線各駅停車と東武亀戸線のデータを読み込む
-      const sobuResponse = await fetch('/data/railways/jr/sobu.json');
-      const tobuKamedoResponse = await fetch(
-        '/data/railways/private/tobu-kamedo.json'
+      const indexResponse = await fetch('/data/railways/index.json');
+      if (!indexResponse.ok) {
+        throw new NotFoundError('RailwayData', 'index');
+      }
+      const index = (await indexResponse.json()) as { files: string[] };
+
+      const maps = await Promise.all(
+        index.files.map(async (file) => {
+          const response = await fetch(`/data/railways/${file}`);
+          if (!response.ok) {
+            throw new NotFoundError('RailwayData', file);
+          }
+          return (await response.json()) as RailwayMap;
+        })
       );
 
-      if (!sobuResponse.ok) {
-        throw new NotFoundError('RailwayData', 'sobu');
-      }
-
-      if (!tobuKamedoResponse.ok) {
-        throw new NotFoundError('RailwayData', 'tobu-kamedo');
-      }
-
-      const sobuData = (await sobuResponse.json()) as RailwayMap;
-      const tobuKamedoData = (await tobuKamedoResponse.json()) as RailwayMap;
-
-      // データを統合
       this.railwayMapCache = {
-        stations: [...sobuData.stations, ...tobuKamedoData.stations],
-        lines: [...sobuData.lines, ...tobuKamedoData.lines],
-        connections: [...sobuData.connections, ...tobuKamedoData.connections],
+        stations: maps.flatMap((m) => m.stations),
+        lines: maps.flatMap((m) => m.lines),
+        connections: maps.flatMap((m) => m.connections),
       };
 
       return this.railwayMapCache;

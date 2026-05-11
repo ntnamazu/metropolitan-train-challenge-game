@@ -1,0 +1,92 @@
+{
+  "stations": [
+    {
+      "id": "st-shibuya",
+      "name": "渋谷",
+      "lines": ["line-yamanote"],
+      "position": { "x": 0, "y": 0 }
+    },
+    {
+      "id": "st-harajuku",
+      "name": "原宿",
+      "lines": ["line-yamanote"],
+      "position": { "x": 50, "y": 0 }
+    },
+    {
+      "id": "st-yoyogi",
+      "name": "代々木",
+      "lines": ["line-yamanote"],
+      "position": { "x": 100, "y": 0 }
+    },
+    {
+      "id": "st-shinjuku",
+      "name": "新宿",
+      "lines": ["line-yamanote"],
+      "position": { "x": 150, "y": 0 }
+    },
+    {
+      "id": "st-shin-okubo",
+      "name": "新大久保",
+      "lines": ["line-yamanote"],
+      "position": { "x": 200, "y": 0 }
+    },
+    {
+      "id": "st-takadanobaba",
+      "name": "高田馬場",
+      "lines": ["line-yamanote"],
+      "position": { "x": 250, "y": 0 }
+    }
+  ],
+  "lines": [
+    {
+      "id": "line-yamanote",
+      "name": "山手線",
+      "company": "JR東日本",
+      "color": "#9ACD32",
+      "category": "jr",
+      "stations": [
+        "st-shibuya",
+        "st-harajuku",
+        "st-yoyogi",
+        "st-shinjuku",
+        "st-shin-okubo",
+        "st-takadanobaba"
+      ],
+      "quizPhotos": [],
+      "feedbackPhotos": [],
+      "unlockPhoto": null
+    }
+  ],
+  "connections": [
+    {
+      "fromStationId": "st-shibuya",
+      "toStationId": "st-harajuku",
+      "lineId": "line-yamanote",
+      "travelTime": 2
+    },
+    {
+      "fromStationId": "st-harajuku",
+      "toStationId": "st-yoyogi",
+      "lineId": "line-yamanote",
+      "travelTime": 2
+    },
+    {
+      "fromStationId": "st-yoyogi",
+      "toStationId": "st-shinjuku",
+      "lineId": "line-yamanote",
+      "travelTime": 2
+    },
+    {
+      "fromStationId": "st-shinjuku",
+      "toStationId": "st-shin-okubo",
+      "lineId": "line-yamanote",
+      "travelTime": 2
+    },
+    {
+      "fromStationId": "st-shin-okubo",
+      "toStationId": "st-takadanobaba",
+      "lineId": "line-yamanote",
+      "travelTime": 2
+    }
+  ]
+}

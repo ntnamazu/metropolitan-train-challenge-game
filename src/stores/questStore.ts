@@ -8,6 +8,7 @@ import type {
   PuzzleState,
   PuzzleResult,
   RailwayMap,
+  DifficultyLevel,
 } from '../types';
 import { questManager, quizEngine, puzzleEngine } from '../services/instances';
 
@@ -26,7 +27,7 @@ interface QuestState {
   puzzleResult: PuzzleResult | null;
   questCompleted: boolean;
   rewards: Quest['rewards'];
-  loadAvailableQuests: () => Promise<void>;
+  loadAvailableQuests: (level?: DifficultyLevel) => Promise<void>;
   selectQuest: (quest: Quest) => void;
   startQuest: () => Promise<void>;
   submitQuizAnswer: (selectedIndex: number) => QuizResult | null;
@@ -58,10 +59,10 @@ export const useQuestStore = create<QuestState>((set, get) => ({
   questCompleted: false,
   rewards: [],
 
-  loadAvailableQuests: async () => {
+  loadAvailableQuests: async (level = 1) => {
     set({ isLoadingQuests: true });
     try {
-      const quests = await questManager.getAvailableQuests(1);
+      const quests = await questManager.getAvailableQuests(level);
       set({ availableQuests: quests, isLoadingQuests: false });
     } catch {
       set({ isLoadingQuests: false });
