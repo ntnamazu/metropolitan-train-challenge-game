@@ -1,0 +1,23 @@
+[
+  {
+    "id": "vehicle-e233-sobu",
+    "name": "E233系 0番台",
+    "description": "中央・総武線各駅停車で活躍する通勤電車。黄色い帯が特徴。",
+    "rarity": "common",
+    "lineId": "line-sobu"
+  },
+  {
+    "id": "vehicle-8000-tobu-kamedo",
+    "name": "東武8000系",
+    "description": "東武亀戸線で長年活躍してきたベテラン電車。",
+    "rarity": "common",
+    "lineId": "line-tobu-kamedo"
+  },
+  {
+    "id": "vehicle-e235-yamanote",
+    "name": "E235系",
+    "description": "山手線の最新型通勤電車。最先端の技術を搭載した次世代車両。",
+    "rarity": "rare",
+    "lineId": "line-yamanote"
+  }
+]

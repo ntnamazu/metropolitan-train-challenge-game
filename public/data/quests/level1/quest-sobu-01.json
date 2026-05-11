@@ -26,6 +26,12 @@
       "rarity": "common"
     },
     {
+      "type": "vehicle_card",
+      "id": "vehicle-e233-sobu",
+      "name": "E233系 0番台",
+      "rarity": "common"
+    },
+    {
       "type": "points",
       "id": "points-100",
       "name": "100ポイント"

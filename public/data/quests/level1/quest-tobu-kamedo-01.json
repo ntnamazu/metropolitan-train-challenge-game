@@ -26,6 +26,12 @@
       "rarity": "common"
     },
     {
+      "type": "vehicle_card",
+      "id": "vehicle-8000-tobu-kamedo",
+      "name": "東武8000系",
+      "rarity": "common"
+    },
+    {
       "type": "points",
       "id": "points-100",
       "name": "100ポイント"

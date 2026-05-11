@@ -5,6 +5,24 @@
 import type { DifficultyLevel } from './common';
 
 /**
+ * 車両カード
+ */
+export interface VehicleCard {
+  /** 車両カードID */
+  id: string;
+  /** 車両名 */
+  name: string;
+  /** 説明 */
+  description: string;
+  /** レア度 */
+  rarity: 'common' | 'rare' | 'legendary';
+  /** 所属路線ID */
+  lineId: string;
+  /** 画像URL (オプション) */
+  imageUrl?: string;
+}
+
+/**
  * バッジ
  */
 export interface Badge {

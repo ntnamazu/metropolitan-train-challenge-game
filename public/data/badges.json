@@ -1,20 +1,56 @@
 [
   {
-    "id": "badge-sobu-master",
-    "name": "総武線マスター",
-    "description": "中央・総武線のすべてのクエストをクリア",
-    "condition": {
-      "type": "complete_quest",
-      "requirement": "quest-sobu-02"
-    }
-  },
-  {
     "id": "badge-first-quest",
     "name": "はじめの一歩",
     "description": "最初のクエストをクリア",
     "condition": {
       "type": "complete_quest",
       "requirement": "quest-sobu-01"
+    }
+  },
+  {
+    "id": "badge-sobu-master",
+    "name": "総武線マスター",
+    "description": "中央・総武線のすべてのクエストをクリア",
+    "condition": {
+      "type": "complete_line",
+      "requirement": ["quest-sobu-01", "quest-sobu-02"]
+    }
+  },
+  {
+    "id": "badge-tobu-kamedo",
+    "name": "東武亀戸線制覇",
+    "description": "東武亀戸線のクエストをクリア",
+    "condition": {
+      "type": "complete_quest",
+      "requirement": "quest-tobu-kamedo-01"
+    }
+  },
+  {
+    "id": "badge-quiz-master",
+    "name": "クイズ名人",
+    "description": "クイズに5問以上正解",
+    "condition": {
+      "type": "total_correct_quizzes",
+      "requirement": 5
+    }
+  },
+  {
+    "id": "badge-collector",
+    "name": "コレクター",
+    "description": "クエストを3個以上クリア",
+    "condition": {
+      "type": "quest_count",
+      "requirement": 3
+    }
+  },
+  {
+    "id": "badge-persistence",
+    "name": "継続は力なり",
+    "description": "3日間連続でプレイ",
+    "condition": {
+      "type": "play_days",
+      "requirement": 3
     }
   }
 ]
