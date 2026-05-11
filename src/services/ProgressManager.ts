@@ -129,7 +129,7 @@ export class ProgressManager {
         date: new Date().toISOString().split('T')[0],
         questId: '',
         completed: false,
-        bonusPoints: 0,
+        bonusPoints: 100,
       },
       statistics: {
         totalQuizzes: 0,

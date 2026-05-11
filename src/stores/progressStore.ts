@@ -1,6 +1,10 @@
 import { create } from 'zustand';
 import type { PlayerProgress, Reward } from '../types';
-import { progressManager, badgeSystem } from '../services/instances';
+import {
+  progressManager,
+  badgeSystem,
+  dailyChallengeManager,
+} from '../services/instances';
 
 interface ProgressState {
   progress: PlayerProgress | null;
@@ -8,6 +12,7 @@ interface ProgressState {
   initProgress: () => void;
   updateProgress: (progress: PlayerProgress) => void;
   completeQuest: (questId: string, rewards: Reward[]) => void;
+  completeDailyChallenge: (questId: string) => void;
 }
 
 export const useProgressStore = create<ProgressState>((set, get) => ({
@@ -65,6 +70,23 @@ export const useProgressStore = create<ProgressState>((set, get) => ({
     }
 
     updated.lastPlayedAt = new Date();
+    updateProgress(updated);
+
+    if (
+      updated.dailyChallenge.questId === questId &&
+      !updated.dailyChallenge.completed
+    ) {
+      get().completeDailyChallenge(questId);
+    }
+  },
+
+  completeDailyChallenge: (questId) => {
+    const { progress, updateProgress } = get();
+    if (!progress) return;
+
+    const updated = { ...progress };
+    dailyChallengeManager.markAsCompleted(updated, questId);
+    dailyChallengeManager.awardBonusPoints(updated);
     updateProgress(updated);
   },
 }));

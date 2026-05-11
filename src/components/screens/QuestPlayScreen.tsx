@@ -19,10 +19,12 @@ type Phase = 'loading' | 'quiz' | 'puzzle' | 'challenge' | 'error';
 function RewardModal({
   rewards,
   unlockedLine,
+  isDailyChallenge,
   onClose,
 }: {
   rewards: Quest['rewards'];
   unlockedLine: RailwayLine | null;
+  isDailyChallenge: boolean;
   onClose: () => void;
 }) {
   return (
@@ -36,6 +38,13 @@ function RewardModal({
         {unlockedLine?.unlockPhoto && (
           <div className="mb-4">
             <RailwayLinePhoto photo={unlockedLine.unlockPhoto} />
+          </div>
+        )}
+        {isDailyChallenge && (
+          <div className="bg-orange-50 border border-orange-200 rounded-lg px-4 py-2 mb-3">
+            <span className="font-semibold text-orange-800">
+              📅 デイリーボーナス: +100ポイント
+            </span>
           </div>
         )}
         <div className="flex flex-col gap-2 mb-5">
@@ -52,7 +61,7 @@ function RewardModal({
           ))}
         </div>
         <Button onClick={onClose} className="w-full py-3">
-          クエスト一覧へ戻る
+          {isDailyChallenge ? 'デイリーチャレンジへ戻る' : 'クエスト一覧へ戻る'}
         </Button>
       </div>
     </div>
@@ -62,6 +71,7 @@ function RewardModal({
 export function QuestPlayScreen() {
   const navigate = useUiStore((s) => s.navigate);
   const completeQuestProgress = useProgressStore((s) => s.completeQuest);
+  const progress = useProgressStore((s) => s.progress);
   const { selectedQuest, startQuest, completeCurrentStep, completeQuest } =
     useQuestStore();
 
@@ -142,6 +152,9 @@ export function QuestPlayScreen() {
   const hasRailwayLineReward = selectedQuest.rewards.some(
     (r) => r.type === 'railway_line'
   );
+  const isDailyChallenge =
+    !!progress?.dailyChallenge.questId &&
+    progress.dailyChallenge.questId === selectedQuest.id;
 
   return (
     <div className="min-h-screen p-4 max-w-lg mx-auto">
@@ -227,7 +240,12 @@ export function QuestPlayScreen() {
         <RewardModal
           rewards={selectedQuest.rewards}
           unlockedLine={hasRailwayLineReward ? railwayLine : null}
-          onClose={() => navigate('quest-list')}
+          isDailyChallenge={isDailyChallenge}
+          onClose={() =>
+            isDailyChallenge
+              ? navigate('daily-challenge')
+              : navigate('quest-list')
+          }
         />
       )}
     </div>

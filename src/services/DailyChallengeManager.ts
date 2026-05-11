@@ -9,10 +9,11 @@ export class DailyChallengeManager {
    * 今日のクエストを取得
    */
   getDailyQuest(date: string, availableQuests: Quest[]): Quest {
-    // 日付をシード値として使い、クエストを選択
+    if (availableQuests.length === 0) {
+      throw new Error('利用可能なクエストが存在しません');
+    }
     const seed = this.dateToSeed(date);
     const index = seed % availableQuests.length;
-
     return availableQuests[index];
   }
 

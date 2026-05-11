@@ -7,6 +7,7 @@ import type { Quest } from '../../types';
 export function DailyChallengeScreen() {
   const navigate = useUiStore((s) => s.navigate);
   const progress = useProgressStore((s) => s.progress);
+  const updateProgress = useProgressStore((s) => s.updateProgress);
   const { availableQuests, loadAvailableQuests, selectQuest } = useQuestStore();
   const [dailyQuest, setDailyQuest] = useState<Quest | null>(null);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -24,7 +25,16 @@ export function DailyChallengeScreen() {
   }, [availableQuests, progress]);
 
   const handleStart = () => {
-    if (!dailyQuest) return;
+    if (!dailyQuest || !progress) return;
+
+    const updated = { ...progress };
+    dailyChallengeManager.resetIfNeeded(updated);
+    updated.dailyChallenge = {
+      ...updated.dailyChallenge,
+      questId: dailyQuest.id,
+    };
+    updateProgress(updated);
+
     selectQuest(dailyQuest);
     navigate('quest-play');
   };
